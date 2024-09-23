@@ -1,0 +1,140 @@
+.all {
+    width: 350px;
+    
+}
+
+
+.nav {
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    z-index: 1;
+    width: 280px;
+    border-right: 0.1px solid white;
+    height: 100%;
+}
+
+.nav_logo {
+    width: 120px;
+    margin: 25px;
+}
+
+.nav_buttons {
+    display: flex;
+    flex-direction: column;
+}
+
+.side_button {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    color: white;
+    background: 0;
+    border: 0;
+    margin: 5px 10px 5px 10px;
+    padding: 10px 15px 10px 15px;
+    border-radius: 15px;
+    /* width: 90%; */
+}
+
+.side_button:hover {
+    cursor: pointer;
+    background-color: rgba( 255, 255, 255, 0.128);
+}
+
+.side_button > span {
+    font-size: 18px;
+    font-weight: bolder;
+    margin-left: 10px;
+}
+a{
+    color: white;
+    text-decoration: none;
+}
+
+.side_more {
+    position: fixed;
+     bottom: 3px;
+}
+
+.addPost {
+    background-color: rgb(255, 255, 255);
+    color: blue;
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    top: 50%;
+    left: 50%;
+    width: 70%;
+    height: 700px;
+    transform: translate(-50%, -50%);
+    border-radius: 10px;
+    align-items: center;
+    overflow-y: scroll;
+}
+
+.topAddPost {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    width: 95%;
+    color: black;
+    font-weight: 600;
+    font-size: 24px;
+}
+
+.addPost > input[type="text"], .searchUser > input {
+    border: 1px solid black;
+    color: black;
+    width: 400px;
+    height: 30px;
+    border-radius: 10px;
+    background-color: transparent;
+    font-size: 16px;
+}
+/* .addPost > input[type="file"]{
+    border: 1px solid black;
+    color: black;
+    height: 100px;
+    display: none;
+}
+
+#file {
+    cursor: pointer;
+    border: 1px solid black;
+    width: 75%;
+    border-radius: 10px;
+    width: 400px;
+    height:50px;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(129, 127, 127, 0.253);
+}
+  */
+.div {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    width: 400px;
+    height: 200px;
+    background-color: rgba(0, 0, 0, 0.459);
+    border-radius: 10px;
+}
+
+.div > img {
+    width: 100%;
+    height: 100%;
+    aspect-ratio: 1/1;
+    object-fit: cover;
+    border-radius: 10px;
+
+}
+
+.addPost button {
+    background-color: blue;
+    width: 100px;
+    height: 20px;
+    border: none;
+}
+
