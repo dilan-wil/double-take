@@ -3,7 +3,7 @@ import { addDoc, setDoc, collection, serverTimestamp } from "firebase/firestore"
 
 export const addLive = async (userId, postId) => {
     try {
-        const collectionRef = collection(db, "live")
+        const collectionRef = collection(db, "lives")
         await addDoc(collectionRef, {
             userId: userId,
             postId: postId,

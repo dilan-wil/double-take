@@ -51,6 +51,7 @@ export const UserProfile = () => {
     const [sent, setSend] = useState(false)
     const [picture, setPicture] = useState(true)
     const [userPosts, setUserPosts] = useState([])
+    const [userLives, setUserLives] = useState([])
     const { isOpen, onOpen, onClose } = useDisclosure()
     const [selectedTab, setSelectedTab] = useState('posts');  // Default to 'posts'
     const fileInputRef = useRef()
@@ -86,6 +87,7 @@ export const UserProfile = () => {
             // get user document
             const doc = await getADocument(userId, "users");
             setUserDoc(doc);
+
             // get user post
             const posts = await getASubCollection("users", userId, "posts")
             console.log(posts)
@@ -98,6 +100,19 @@ export const UserProfile = () => {
             );
             console.log(postsDatas);
             setUserPosts(postsDatas)
+
+            // get user lives
+            const lives = await getASubCollection("users", userId, "lives")
+            console.log(lives)
+            const livesDatas = await Promise.all(
+                posts.map(async (live) => {
+                  const liveData = await getADocument(live.postId, "posts");
+                  console.log(liveData)
+                  return liveData;
+                })
+            );
+            console.log(livesDatas);
+            setUserLives(livesDatas)
           };
       
           fetchUserDoc();
@@ -273,7 +288,11 @@ export const UserProfile = () => {
                         ))}
                     </SimpleGrid>
                     ) : (
-                        <Heading>No live events at the moment!</Heading> // Replace with actual Live Events data if available
+                        <SimpleGrid style={{width: "100%"}} columns={{base: 1, md:2, lg: 3, xl: 4}} spacing={{base: 10, md: 4}}>
+                            {userLives.map((post) => (
+                                <PostCard post={post} creator={userId === post?.userId ? true : false} height={200} />
+                            ))}
+                        </SimpleGrid>
                     )}
                 </Flex>
             </Box>

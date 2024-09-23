@@ -1,38 +1,38 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { db } from "../../functions/firebase"
-import { collection, getDocs } from "firebase/firestore"
-import { HeaderWithSideBar, Header } from "../../components/navigation/Headers";
-import { getACollection } from "../../functions/getACollection";
-import { PostCard } from "../../components/PostCard";
+import { auth } from "../../functions/firebase"
+import { HeaderWithSideBar } from "../../components/navigation/Headers";
+import { getADocument } from "../../functions/getADocument";
 import { 
   Box, 
   useColorModeValue,
   Flex,
   SimpleGrid 
 } from "@chakra-ui/react";
-import { useLocation } from 'react-router-dom';
+import { useAuthState } from "react-firebase-hooks/auth";
+import { useParams } from "react-router-dom"
 
 export const LiveWatch = () => {
-    const [ post, setPost ] = useState(null)
+    const [ live, setLive ] = useState(null)
+    const [ user, setUser ] = useState(null)
     const [ userChoice, setUserChoice ] = useState(null)
+    const [ loggedUser ] = useAuthState(auth)
+    const { postId } = useParams()
 
     useEffect(() => {
-        const fetchPosts = async () => {
-        //   try {
-        //     const postsList = await getACollection("posts");
-        //     setPosts(postsList);
-        //   } catch (error) {
-        //     console.error("Error fetching posts:", error);
-        //   }
-        };
-    
-        fetchPosts();
-      }, []);
-
-      const handlePostClick = (postId) => {
-        navigate(`/live/${postId}`)
-      }
+      const fetchPostDoc = async () => {
+        // get post document
+        const doc = await getADocument(postId, "posts");
+        console.log(doc)
+        setLive(doc);
+        // get post creator
+        const user = await getADocument(post?.userId, "users")
+        console.log(user)
+        setUser(user)
+      };
+  
+      fetchPostDoc();
+    }, []);
 
       const onVote = (choice) => {
 
@@ -41,8 +41,13 @@ export const LiveWatch = () => {
     return(
       <Flex minH="100vh" bg={useColorModeValue('gray.100', 'gray.900')}>
         <HeaderWithSideBar />
-        <Box mt={20} p={{base: 0, md: 4}}>
-            
+        <Box w={"100%"} mt={20} p={{base: 0, md: 4}}>
+          {loggedUser?.uid === live?.userId &&
+            <Box w={"100%"}>
+              <PostPlayer post={post} />
+            </Box>
+          }
+          
         </Box>
       </Flex>
     )
