@@ -21,7 +21,7 @@ function App() {
         <Route path="/studio/create-post" element={<ProtectedRoute><CreatePost /></ProtectedRoute>} />
         <Route path="/user/:userId" element={<ProtectedRoute><UserProfile /></ProtectedRoute>} />
         <Route path="/posts/:postId" element={<ViewPost />} />
-        <Route path="/live/:postId" element={<LiveWatch />} />
+        <Route path="/live/:liveId" element={<LiveWatch />} />
         <Route path="/auth/login" element={<Login />}/>
         <Route path="/auth/signup" element={<SignUp />}/>
         <Route path="/auth/password-reset" element={<ResetPassword />} />

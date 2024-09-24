@@ -84,22 +84,6 @@ export const ViewPost = () => {
         };
     }, []);
 
-    // useEffect(() => {
-    //     const handleKeyDown = (event) => {
-    //         if (event.key === 't' || event.key === 'T') {
-    //             setCinema(!cinema)
-    //         }
-    //     };
-
-    //     // Add event listener for keydown when the component mounts
-    //     window.addEventListener('keydown', handleKeyDown);
-
-    //     // Cleanup the event listener when the component unmounts
-    //     return () => {
-    //         window.removeEventListener('keydown', handleKeyDown);
-    //     };
-    // }, [cinema]);
-
     return(
         <Flex minH="100vh" bg={useColorModeValue('gray.100', 'gray.900')}>
             <Header />

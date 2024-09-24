@@ -169,18 +169,13 @@ export const Header = ({ userDoc, toggle, handleToggle, onOpen1, ...rest }) => {
   const [user] = useAuthState(auth)
   const [userInfo, setUserInfo] = useState(null)
   useEffect(() => {
-    console.log(userDoc)
     const fetchUserDoc = async () => {
       if(userDoc){
         setUserInfo(userDoc)
-        console.log(userInfo)
       } else {
-        const doc = await getADocument(user.uid, "users");
-        console.log(doc)
+        const doc = await getADocument(user && user.uid ? user.uid : "", "users");
         setUserInfo(doc)
-        console.log(userInfo)
       }
-        console.log(userDoc)
       };
   
       fetchUserDoc();

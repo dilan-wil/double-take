@@ -83,35 +83,28 @@ export const UserProfile = () => {
 
     useEffect(() => {
         const fetchUserDoc = async () => {
-            console.log(userId)
             // get user document
             const doc = await getADocument(userId, "users");
             setUserDoc(doc);
 
             // get user post
             const posts = await getASubCollection("users", userId, "posts")
-            console.log(posts)
             const postsDatas = await Promise.all(
                 posts.map(async (post) => {
                   const postData = await getADocument(post.postId, "posts");
-                  console.log(postData)
                   return postData;
                 })
             );
-            console.log(postsDatas);
             setUserPosts(postsDatas)
 
             // get user lives
             const lives = await getASubCollection("users", userId, "lives")
-            console.log(lives)
             const livesDatas = await Promise.all(
-                posts.map(async (live) => {
+                lives.map(async (live) => {
                   const liveData = await getADocument(live.postId, "posts");
-                  console.log(liveData)
-                  return liveData;
+                  return {...liveData, liveId: live.liveId};
                 })
             );
-            console.log(livesDatas);
             setUserLives(livesDatas)
           };
       
@@ -290,7 +283,7 @@ export const UserProfile = () => {
                     ) : (
                         <SimpleGrid style={{width: "100%"}} columns={{base: 1, md:2, lg: 3, xl: 4}} spacing={{base: 10, md: 4}}>
                             {userLives.map((post) => (
-                                <PostCard post={post} creator={userId === post?.userId ? true : false} height={200} />
+                                <PostCard post={post} creator={userId === post?.userId ? true : false} height={200} type={"live"}/>
                             ))}
                         </SimpleGrid>
                     )}

@@ -2,7 +2,7 @@ import { updateDoc, doc } from 'firebase/firestore';
 import { db, storage } from './firebase';
 import { ref, getDownloadURL, uploadBytesResumable } from 'firebase/storage';
 
-export const updateADoc = async (uid, updateValues,setTheDoc) => {
+export const updateADoc = async (uid, updateValues, setTheDoc) => {
   const userDocRef = doc(db, 'users', uid);
     if(updateValues.profilePicture){
         const profileImageRef = ref(storage, `posts/${uid}/${updateValues.profilePicture.name}`);

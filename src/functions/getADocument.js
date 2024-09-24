@@ -3,6 +3,12 @@ import { db } from "./firebase";
 
 export const getADocument = async (id, collection) => {
     try {
+
+      // Ensure id and collection are valid
+      if (!id || !collection) {
+        return ""
+      }
+
       // Reference to the document
       const docRef = doc(db, collection, id);
   

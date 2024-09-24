@@ -5,7 +5,6 @@ import { auth } from "../functions/firebase"; // Import Firebase Auth instance
 
 const ProtectedRoute = ({ children }) => {
     const [user, loading] = useAuthState(auth); // Use Firebase hook to get auth state
-    console.log(user)
     if (loading) {
         return <div>Loading...</div>; // Or a spinner/loader component
     }

@@ -50,6 +50,7 @@ export const PostCard = ({post, show, creator, type}) => {
     const [ loggedUser ] = useAuthState(auth)
     const navigate = useNavigate()
 
+
     const addToLive = async () => {
         await addLive(loggedUser.uid, post.id)
         .then(()=> {
@@ -89,13 +90,11 @@ export const PostCard = ({post, show, creator, type}) => {
     ]
 
     useEffect(() => {
-        console.log(post)
         const fetchUser = async () => {
           try {
             const User = await getADocument(post.userId, "users");
             setUser(User);
           } catch (error) {
-            console.error("Error fetching posts:", error);
           }
         };
     
@@ -113,7 +112,7 @@ export const PostCard = ({post, show, creator, type}) => {
             }}
             style={{width: "100%"}}
         >
-            <Box onClick={() => navigate(`/posts/${post.id}`)} borderRadius={{base: 0, md: 10}} height={'200px'} w={'100%'} backgroundImage={post?.coverImage} backgroundSize={'cover'} backgroundPosition="center" backgroundRepeat="no-repeat" />
+            <Box onClick={() => type==="live" ? navigate(`/live/${post.liveId}`) : navigate(`/posts/${post.id}`)} borderRadius={{base: 0, md: 10}} height={'200px'} w={'100%'} backgroundImage={post?.coverImage} backgroundSize={'cover'} backgroundPosition="center" backgroundRepeat="no-repeat" />
             <Flex  mt={{base: 2, md: 4}} justifyContent={'space-between'}>
                 <Flex>
                     {show &&
@@ -123,7 +122,7 @@ export const PostCard = ({post, show, creator, type}) => {
                         alignSelf={'center'} />
                     }
                         <Box ml={3}>
-                            <Text onClick={() => navigate(`/posts/${post.id}`)} fontSize={{base: '85%', md: '100%'}} fontWeight={600}>{post && post.name ? post.name : ""}</Text>
+                            <Text onClick={() => type==="live" ? navigate(`/live/${post.liveId}`) : navigate(`/posts/${post.id}`)} fontSize={{base: '85%', md: '100%'}} fontWeight={600}>{post && post.name ? post.name : ""}</Text>
                             {show &&
                                 <Text onClick={() => navigate(`/user/${post.userId}`)} _hover={{color: 'red'}} fontSize={{base: '85%', md: '100%'}} color={useColorModeValue('gray.600','gray.400')}>{user && user.username ? `@${user.username}` : ""}</Text>
                             }

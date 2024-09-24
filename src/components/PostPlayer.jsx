@@ -20,10 +20,7 @@ import { getASubCollection } from "../functions/getASubCollection"
 export const PostPlayer = ({ post }) => {
     const [scenarios, setScenarios] = useState([]);
     const [current, setCurrent] = useState(null);
-    const [nextChoices, setNextChoices] = useState(null);
-    const [scenarioChoice, setScenarioChoice] = useState(false)
     const {isOpen, onOpen, onClose} = useDisclosure()
-    const [open, setOpen] = useState(false)
     useEffect(() => {
         const fetchScenarios = async () => {
             if(post && post.id){

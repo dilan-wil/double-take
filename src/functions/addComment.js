@@ -11,7 +11,6 @@ export const addComment = async (userId, postId, comment) => {
             likes: 0
         })
     } catch(error) {
-        console.log(error)
     }
 
 }
