@@ -17,7 +17,7 @@ import {
 } from "@chakra-ui/react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useParams } from "react-router-dom"
-import { onSnapshot, doc, updateDoc, increment, serverTimestamp } from "firebase/firestore"; // For real-time updates from Firestore
+import { onSnapshot, doc, updateDoc, increment, serverTimestamp, deleteField } from "firebase/firestore"; // For real-time updates from Firestore
 
 export const LiveWatch = () => {
     const [ live, setLive ] = useState(null)
@@ -169,6 +169,7 @@ export const LiveWatch = () => {
       const scenarioKeys = Object.keys(updatedLiveDoc).filter(
         (key) => key !== "postId" && key !== "userId" && key !== "createdAt" && key !== "countdownStart" && key !== "choice" && key !== "id"
       );
+      
 
       // Calculate total votes
       const totalVotes = scenarioKeys.reduce((total, key) => total + updatedLiveDoc[key], 0);
@@ -180,6 +181,43 @@ export const LiveWatch = () => {
       });
 
       setResults(percentages); // Store percentages for rendering
+
+      // Find the scenario with the highest percentage
+      const maxScenarioKey = scenarioKeys.reduce((maxKey, key) => {
+        return percentages[key] > percentages[maxKey] ? key : maxKey;
+      }, scenarioKeys[0]);
+
+      // Find the corresponding scenario in the scenarios array
+      const nextScenario = scenarios.find((scenario) => scenario.name === maxScenarioKey);
+      console.log("next : ", nextScenario)
+      if(nextScenario){
+        setCurrent(nextScenario)
+      }
+
+      // Clean up the Firestore document by removing countdownStart and scenario fields
+      await cleanUpFirebaseDocument(scenarioKeys);
+
+    };
+
+    // Function to clean the Firebase document
+    const cleanUpFirebaseDocument = async (scenarioKeys) => {
+      const liveDocRef = doc(db, 'lives', liveId); // Reference to the 'lives' document
+
+      try {
+        // Prepare the fields to be deleted
+        const fieldsToDelete = { countdownStart: deleteField() };
+
+        // Add scenario fields to be deleted
+        scenarioKeys.forEach((key) => {
+          fieldsToDelete[key] = deleteField();
+        });
+
+        // Update the Firestore document to remove countdownStart and scenario fields
+        await updateDoc(liveDocRef, fieldsToDelete);
+
+      } catch (error) {
+        console.error("Error cleaning the document:", error);
+      }
     };
 
     // render voting results
@@ -195,16 +233,27 @@ export const LiveWatch = () => {
         </Box>
       );
     };
+
     // voting ui
     const renderVotingUI = () => {
+
+      if (!canVote) {
+        return renderVoteResults(); // Show the results when voting is over
+      }
+
+      if (current?.isParent===false) {
+        return (
+          <Text>There's no scenario choice after this scenario. This is the end !</Text>
+        )
+      }
+      const availableScenarios = scenarios.filter(scenario => scenario.parent === current?.name);
+
       return (
         <Box mt={5}>
           <Text>Time remaining to vote: {timer} seconds</Text>
-        {canVote ? (
-          <>
             <RadioGroup onChange={setSelectedScenario} value={selectedScenario}>
               <Stack direction="column">
-                {scenarios.map((scenario) => (
+                {availableScenarios.map((scenario) => (
                   <Radio key={scenario.name} value={scenario.name}>
                     {scenario.name}
                   </Radio>
@@ -214,11 +263,6 @@ export const LiveWatch = () => {
             <Button mt={4} onClick={onVote} isDisabled={!selectedScenario}>
               Submit Vote
             </Button>
-          </>
-          ) : (
-            renderVoteResults()
-          )
-        }
         </Box>
       );
     };
